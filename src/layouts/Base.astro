@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  activePage: string;
+}
+
+const { title, activePage } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} - TalkToFigma MCP</title>
+</head>
+<body>
+  <nav class="nav">
+    <a href={`${base}`} class="nav__title">TalkToFigma MCP</a>
+    <div class="nav__links">
+      <a href={`${base}`} class:list={["nav__link", { active: activePage === "home" }]}>Home</a>
+      <a href={`${base}guide/`} class:list={["nav__link", { active: activePage === "guide" }]}>Guide</a>
+      <a href={`${base}components/`} class:list={["nav__link", { active: activePage === "components" }]}>Components</a>
+      <a href={`${base}reference/`} class:list={["nav__link", { active: activePage === "reference" }]}>Reference</a>
+    </div>
+  </nav>
+
+  <slot />
+</body>
+</html>
