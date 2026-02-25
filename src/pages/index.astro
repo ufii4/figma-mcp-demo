@@ -1,11 +1,128 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import ThemeSidebar from '../components/ThemeSidebar.astro';
+import Button from '../components/Button.astro';
+import Badge from '../components/Badge.astro';
+import Input from '../components/Input.astro';
+import Card from '../components/Card.astro';
+import Toggle from '../components/Toggle.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Component Library">
+  <div class="catalog">
+    <ThemeSidebar />
+
+    <main class="main">
+      <h1 class="main__title">Component Library</h1>
+
+      <!-- Buttons -->
+      <section class="section">
+        <h2 class="section__heading">Buttons</h2>
+        <div class="section__row">
+          <Button variant="primary" label="Primary" />
+          <Button variant="secondary" label="Secondary" />
+          <Button variant="outline" label="Outline" />
+          <Button variant="ghost" label="Ghost" />
+        </div>
+        <div class="section__row">
+          <Button variant="primary" size="sm" label="Small" />
+          <Button variant="primary" size="md" label="Medium" />
+          <Button variant="primary" size="lg" label="Large" />
+        </div>
+      </section>
+
+      <!-- Badges -->
+      <section class="section">
+        <h2 class="section__heading">Badges</h2>
+        <div class="section__row">
+          <Badge type="info" />
+          <Badge type="success" />
+          <Badge type="warning" />
+          <Badge type="error" />
+        </div>
+      </section>
+
+      <!-- Inputs -->
+      <section class="section">
+        <h2 class="section__heading">Inputs</h2>
+        <div class="section__row">
+          <Input state="default" placeholder="Enter text..." />
+          <Input state="focused" placeholder="Typing here..." />
+          <Input state="error" placeholder="Invalid input" />
+        </div>
+      </section>
+
+      <!-- Cards -->
+      <section class="section">
+        <h2 class="section__heading">Cards</h2>
+        <div class="section__row">
+          <Card
+            variant="basic"
+            title="Card Title"
+            description="A basic card with title and description content."
+          />
+          <Card
+            variant="action"
+            title="Action Card"
+            description="Card with a call-to-action button."
+            actionLabel="Take Action"
+          />
+        </div>
+      </section>
+
+      <!-- Toggles -->
+      <section class="section">
+        <h2 class="section__heading">Toggle</h2>
+        <div class="section__row">
+          <Toggle id="toggle-off" label="Disabled" />
+          <Toggle id="toggle-on" checked label="Enabled" />
+        </div>
+      </section>
+    </main>
+  </div>
 </Layout>
+
+<style>
+  .catalog {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .main {
+    flex: 1;
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow-y: auto;
+  }
+
+  .main__title {
+    font-family: var(--font-family);
+    font-size: var(--text-h1);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    transition: color var(--transition);
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section__heading {
+    font-family: var(--font-family);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    transition: color var(--transition);
+  }
+
+  .section__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+</style>
