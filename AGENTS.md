@@ -27,3 +27,4 @@ Unrestricted, you can create a landing menu that leads to your components, simpl
 
 1. user needs to access scheme, theme and font settings, adjusting the settings should update your components simultaneously.
 2. components should have variants
+3. use playwright-cli to visual test your implementation for better quality
