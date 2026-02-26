@@ -1,0 +1,118 @@
+---
+const year = new Date().getFullYear();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<footer class="footer">
+  <div class="footer__inner container">
+    <div class="footer__brand">
+      <a href={`${base}/`} class="footer__logo">Vibe Design</a>
+      <p class="footer__description">
+        Learn to design beautiful user interfaces with interactive Figma tutorials and step-by-step walkthroughs.
+      </p>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__heading">Navigation</h4>
+      <a href={`${base}/lessons`} class="footer__link">Lessons</a>
+      <a href={`${base}/showcase`} class="footer__link">Showcase</a>
+      <a href={`${base}/about`} class="footer__link">About</a>
+      <a href={`${base}/resources`} class="footer__link">Resources</a>
+    </div>
+
+    <div class="footer__col">
+      <h4 class="footer__heading">Built With</h4>
+      <span class="footer__link">Astro</span>
+      <span class="footer__link">Figma</span>
+      <span class="footer__link">CSS Custom Properties</span>
+      <span class="footer__link">Vanilla JavaScript</span>
+    </div>
+  </div>
+
+  <div class="footer__bottom container">
+    <p>&copy; {year} Vibe Design. Free & open source.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-6);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-8);
+    max-width: 1440px;
+    padding-inline: var(--space-10);
+  }
+
+  .footer__logo {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .footer__description {
+    margin-top: var(--space-3);
+    font-size: var(--text-body-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  .footer__heading {
+    font-size: var(--text-caption);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__link {
+    font-size: var(--text-body-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  a.footer__link:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__bottom {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    max-width: 1440px;
+    padding-inline: var(--space-10);
+  }
+
+  .footer__bottom p {
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding-inline: var(--space-4);
+    }
+
+    .footer__bottom {
+      padding-inline: var(--space-4);
+    }
+  }
+</style>

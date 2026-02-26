@@ -1,0 +1,221 @@
+---
+import StepIndicator from './StepIndicator.astro';
+import CodeBlock from './CodeBlock.astro';
+
+interface Step {
+  title: string;
+  instruction: string;
+  code?: string;
+  codeFilename?: string;
+  preview: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="walkthrough" data-walkthrough>
+  <StepIndicator totalSteps={steps.length} />
+
+  <div class="walkthrough__panels">
+    {steps.map((step, i) => (
+      <div
+        class:list={['walkthrough__step', { 'walkthrough__step--active': i === 0 }]}
+        data-walkthrough-step={i + 1}
+      >
+        <div class="walkthrough__instruction">
+          <span class="walkthrough__step-label text-label text-primary">Step {i + 1}</span>
+          <h3 class="text-h3">{step.title}</h3>
+          <p class="text-body-sm text-secondary">{step.instruction}</p>
+          {step.code && (
+            <CodeBlock code={step.code} filename={step.codeFilename} />
+          )}
+        </div>
+        <div class="walkthrough__preview">
+          <div class="walkthrough__preview-frame" set:html={step.preview} />
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="walkthrough__nav">
+    <button class="btn btn--secondary btn--md" data-walkthrough-prev disabled>
+      &larr; Previous Step
+    </button>
+    <button class="btn btn--primary btn--md" data-walkthrough-next>
+      Next Step &rarr;
+    </button>
+  </div>
+</div>
+
+<script>
+  function initWalkthrough() {
+    document.querySelectorAll<HTMLElement>('[data-walkthrough]').forEach(walkthrough => {
+      let current = 1;
+      const steps = walkthrough.querySelectorAll<HTMLElement>('[data-walkthrough-step]');
+      const dots = walkthrough.querySelectorAll<HTMLElement>('[data-step-dot]');
+      const counter = walkthrough.querySelector<HTMLElement>('[data-step-counter]');
+      const prevBtn = walkthrough.querySelector<HTMLButtonElement>('[data-walkthrough-prev]');
+      const nextBtn = walkthrough.querySelector<HTMLButtonElement>('[data-walkthrough-next]');
+      const total = steps.length;
+
+      function goToStep(n: number) {
+        if (n < 1 || n > total) return;
+        current = n;
+
+        steps.forEach(step => {
+          const num = Number(step.dataset.walkthroughStep);
+          step.classList.toggle('walkthrough__step--active', num === current);
+        });
+
+        dots.forEach(dot => {
+          const num = Number(dot.dataset.stepDot);
+          dot.className = 'step-dot';
+          if (num < current) dot.classList.add('step-dot--complete');
+          else if (num === current) dot.classList.add('step-dot--active');
+          else dot.classList.add('step-dot--upcoming');
+          dot.textContent = num < current ? '\u2713' : String(num);
+        });
+
+        if (counter) counter.textContent = `Step ${current} of ${total}`;
+        if (prevBtn) prevBtn.disabled = current === 1;
+        if (nextBtn) nextBtn.disabled = current === total;
+      }
+
+      prevBtn?.addEventListener('click', () => goToStep(current - 1));
+      nextBtn?.addEventListener('click', () => goToStep(current + 1));
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          goToStep(Number(dot.dataset.stepDot));
+        });
+      });
+
+      // Keyboard navigation
+      walkthrough.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goToStep(current - 1);
+        if (e.key === 'ArrowRight') goToStep(current + 1);
+      });
+
+      walkthrough.setAttribute('tabindex', '0');
+      goToStep(1);
+    });
+  }
+
+  initWalkthrough();
+  document.addEventListener('astro:after-swap', initWalkthrough);
+</script>
+
+<style>
+  .walkthrough {
+    outline: none;
+  }
+
+  .walkthrough__panels {
+    position: relative;
+    min-height: 400px;
+  }
+
+  .walkthrough__step {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--color-surface-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+
+  .walkthrough__step--active {
+    display: grid;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .walkthrough__instruction {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .walkthrough__preview {
+    background: var(--color-surface-alt);
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .walkthrough__preview-frame {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .walkthrough__nav {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-4) 0;
+  }
+
+  /* Button styles within walkthrough */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    font-size: var(--text-body);
+    padding: 0.5rem 1.5rem;
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+  .btn--primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+
+  .btn--secondary {
+    background: var(--color-surface-card);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .btn--secondary:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    .walkthrough__step {
+      grid-template-columns: 1fr;
+    }
+
+    .walkthrough__preview {
+      min-height: 200px;
+    }
+  }
+</style>

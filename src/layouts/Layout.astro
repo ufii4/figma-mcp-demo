@@ -1,31 +1,79 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+import NavBar from '../components/NavBar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
 interface Props {
-  title?: string;
+  title: string;
+  description?: string;
+  transparentNav?: boolean;
 }
 
-const { title = 'Component Library' } = Astro.props;
+const {
+  title,
+  description = 'Learn to design beautiful UIs with Figma through hands-on, step-by-step lessons.',
+  transparentNav = false,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
-<html lang="en" data-theme="ocean" data-scheme="light" data-font="sans">
+<html lang="en" data-theme="ocean" data-scheme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <title>{title}</title>
+    <title>{title} | Vibe Design</title>
+    <ViewTransitions />
   </head>
   <body>
-    <slot />
+    <NavBar transparent={transparentNav} />
+    <main transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Restore theme before paint to prevent flash -->
+    <script is:inline>
+      (function() {
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('vibe-theme');
+        const savedScheme = localStorage.getItem('vibe-scheme');
+        if (savedTheme) html.setAttribute('data-theme', savedTheme);
+        if (savedScheme) html.setAttribute('data-scheme', savedScheme);
+      })();
+    </script>
+
+    <script>
+      // Listen for scheme toggle clicks
+      document.addEventListener('click', (e) => {
+        const toggle = (e.target as HTMLElement).closest('[data-toggle-scheme]');
+        if (toggle) {
+          const html = document.documentElement;
+          const current = html.getAttribute('data-scheme');
+          const next = current === 'light' ? 'dark' : 'light';
+          html.setAttribute('data-scheme', next);
+          localStorage.setItem('vibe-scheme', next);
+        }
+      });
+
+      // Re-init after view transitions
+      document.addEventListener('astro:after-swap', () => {
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('vibe-theme');
+        const savedScheme = localStorage.getItem('vibe-scheme');
+        if (savedTheme) html.setAttribute('data-theme', savedTheme);
+        if (savedScheme) html.setAttribute('data-scheme', savedScheme);
+      });
+    </script>
   </body>
 </html>
-
-<style is:global>
-  @import '../styles/theme.css';
-</style>

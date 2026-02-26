@@ -1,0 +1,52 @@
+---
+interface Props {
+  type?: 'tip' | 'warning' | 'info';
+}
+
+const { type = 'tip' } = Astro.props;
+
+const icons = { tip: '\u{1F4A1}', warning: '\u26A0\uFE0F', info: '\u2139\uFE0F' };
+---
+
+<div class:list={['callout', `callout--${type}`]}>
+  <span class="callout__icon">{icons[type]}</span>
+  <div class="callout__content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .callout {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+  }
+
+  .callout--tip {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .callout--warning {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .callout--info {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  [data-scheme="dark"] .callout--tip { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+  [data-scheme="dark"] .callout--warning { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+  [data-scheme="dark"] .callout--info { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+
+  .callout__icon {
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+</style>

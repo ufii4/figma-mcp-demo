@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="About" description="Learn about the Vibe Design project and its approach to teaching UI design.">
+  <section class="about-hero">
+    <h1 class="text-h1">About Vibe Design</h1>
+    <p class="text-secondary about-lead">
+      A free, open-source project that teaches UI design through hands-on, interactive lessons built with Figma and modern web technologies.
+    </p>
+  </section>
+
+  <section class="about-content container">
+    <div class="about-grid">
+      <div class="about-card">
+        <h2 class="text-h3">Why We Built This</h2>
+        <p class="text-body-sm text-secondary">
+          Learning UI design shouldn't mean watching hours of passive video content. We believe in learning by doing &mdash; building real components, seeing immediate results, and understanding the "why" behind every decision.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h2 class="text-h3">Our Approach</h2>
+        <p class="text-body-sm text-secondary">
+          Each lesson is a progressive walkthrough where you build something tangible. Start with the simplest version, then iterate step-by-step until you have a production-ready component or system.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h2 class="text-h3">The Tech Stack</h2>
+        <p class="text-body-sm text-secondary">
+          Built with Astro for zero-JS static generation, CSS custom properties for the theming system, and vanilla JavaScript for interactivity. No frameworks needed &mdash; just the web platform.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h2 class="text-h3">Design-First</h2>
+        <p class="text-body-sm text-secondary">
+          Every page was designed in Figma before a single line of code was written. The component library, color system, and typography scale all started as Figma design tokens.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-cta">
+      <h2 class="text-h2">Ready to start learning?</h2>
+      <a href={`${base}/lessons`} class="btn btn--primary btn--lg">Browse Lessons</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .about-hero {
+    padding: var(--space-8) var(--space-10) var(--space-6);
+    max-width: 1440px;
+  }
+
+  .about-lead {
+    max-width: 640px;
+    margin-top: var(--space-3);
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+
+  .about-content {
+    padding-bottom: var(--space-9);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
+  }
+
+  .about-card {
+    padding: var(--space-6);
+    background: var(--color-surface-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about-card h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .about-cta {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  .btn--primary { background: var(--color-primary); color: #fff; }
+  .btn--primary:hover { background: var(--color-primary-hover); color: #fff; }
+  .btn--lg { font-size: var(--text-body); padding: 0.75rem 2rem; }
+
+  @media (max-width: 768px) {
+    .about-hero { padding-inline: var(--space-4); }
+    .about-grid { grid-template-columns: 1fr; }
+  }
+</style>

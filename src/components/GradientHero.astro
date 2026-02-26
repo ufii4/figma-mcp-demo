@@ -1,0 +1,78 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero__content">
+    <h1 class="hero__title text-display">{title}</h1>
+    <p class="hero__subtitle">{subtitle}</p>
+    <div class="hero__ctas">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--gradient-hero);
+    padding: var(--space-10) var(--space-10) var(--space-9);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    min-height: 520px;
+    align-items: center;
+  }
+
+  .hero__content {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .hero__title {
+    color: #fff;
+  }
+
+  .hero__subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  /* Hero-specific button overrides */
+  .hero__ctas :global(.btn--ghost) {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  .hero__ctas :global(.btn--ghost:hover) {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: var(--space-8) var(--space-4) var(--space-7);
+      min-height: auto;
+    }
+
+    .hero__ctas {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Badge from '../components/Badge.astro';
+import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+---
+
+<Layout title="Component Showcase" description="See the Vibe Design component library in action with live theme switching.">
+  <section class="showcase-header">
+    <h1 class="text-h1">Component Showcase</h1>
+    <p class="text-secondary">See every component respond to theme and scheme changes in real time.</p>
+  </section>
+
+  <section class="showcase-content">
+    <aside class="showcase-sidebar">
+      <ThemeSwitcher />
+    </aside>
+
+    <div class="showcase-main">
+      <!-- Buttons -->
+      <div class="showcase-section">
+        <h2 class="text-h2">Buttons</h2>
+        <div class="component-grid">
+          <div class="component-row">
+            <Button variant="primary" size="sm">Small</Button>
+            <Button variant="primary" size="md">Medium</Button>
+            <Button variant="primary" size="lg">Large</Button>
+          </div>
+          <div class="component-row">
+            <Button variant="secondary" size="md">Secondary</Button>
+            <Button variant="ghost" size="md">Ghost</Button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="showcase-section">
+        <h2 class="text-h2">Badges</h2>
+        <div class="component-row">
+          <Badge level="beginner" />
+          <Badge level="intermediate" />
+          <Badge level="advanced" />
+        </div>
+      </div>
+
+      <!-- Callouts -->
+      <div class="showcase-section">
+        <h2 class="text-h2">Callouts</h2>
+        <div class="component-stack">
+          <Callout type="tip">Pro tip: Use CSS custom properties to make your designs themeable from day one.</Callout>
+          <Callout type="warning">Warning: Hardcoded colors make theme switching impossible.</Callout>
+          <Callout type="info">Info: This entire site uses only 12 CSS custom properties for its color system.</Callout>
+        </div>
+      </div>
+
+      <!-- Code Block -->
+      <div class="showcase-section">
+        <h2 class="text-h2">Code Block</h2>
+        <CodeBlock
+          filename="theme.css"
+          code={`<span style="color:#c792ea">:root</span> {\n  <span style="color:#82aaff">--color-primary</span>: <span style="color:#f78c6c">#3b82f6</span>;\n  <span style="color:#82aaff">--gradient-hero</span>: <span style="color:#82aaff">linear-gradient</span>(\n    <span style="color:#f78c6c">135deg</span>,\n    <span style="color:#82aaff">var</span>(<span style="color:#f78c6c">--color-primary</span>),\n    <span style="color:#82aaff">var</span>(<span style="color:#f78c6c">--color-accent</span>)\n  );\n}`}
+        />
+      </div>
+
+      <!-- Gradient Preview -->
+      <div class="showcase-section">
+        <h2 class="text-h2">Gradient</h2>
+        <div class="gradient-preview">
+          <p style="color: white; font-weight: 600;">Hero gradient adapts to theme</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .showcase-header {
+    padding: var(--space-7) var(--space-10) var(--space-5);
+  }
+
+  .showcase-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-10) var(--space-9);
+    max-width: 1440px;
+  }
+
+  .showcase-sidebar {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+  }
+
+  .showcase-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .showcase-section h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .component-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .component-row {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .component-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .gradient-preview {
+    height: 160px;
+    border-radius: var(--radius-lg);
+    background: var(--gradient-hero);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-slow);
+  }
+
+  @media (max-width: 768px) {
+    .showcase-header { padding-inline: var(--space-4); }
+    .showcase-content {
+      grid-template-columns: 1fr;
+      padding-inline: var(--space-4);
+    }
+    .showcase-sidebar {
+      position: static;
+    }
+  }
+</style>

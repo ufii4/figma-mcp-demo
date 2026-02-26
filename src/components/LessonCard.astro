@@ -1,0 +1,94 @@
+---
+import Badge from './Badge.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  duration: string;
+  accentColor?: string;
+}
+
+const { title, description, slug, difficulty, duration, accentColor } = Astro.props;
+
+const colorMap: Record<string, string> = {
+  beginner: 'var(--color-primary)',
+  intermediate: 'var(--color-secondary)',
+  advanced: 'var(--color-accent)',
+};
+
+const barColor = accentColor || colorMap[difficulty] || 'var(--color-primary)';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<a href={`${base}/lessons/${slug}`} class="lesson-card">
+  <div class="lesson-card__bar" style={`background: ${barColor}`}></div>
+  <div class="lesson-card__content">
+    <h3 class="lesson-card__title">{title}</h3>
+    <p class="lesson-card__desc">{description}</p>
+    <div class="lesson-card__meta">
+      <Badge level={difficulty} />
+      <span class="lesson-card__duration">{duration}</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .lesson-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .lesson-card__bar {
+    height: 6px;
+    width: 100%;
+  }
+
+  .lesson-card__content {
+    padding: var(--space-5) var(--space-5) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1;
+  }
+
+  .lesson-card__title {
+    font-size: var(--text-h3);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.3;
+  }
+
+  .lesson-card__desc {
+    font-size: var(--text-body-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .lesson-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: auto;
+  }
+
+  .lesson-card__duration {
+    font-size: var(--text-caption);
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+</style>

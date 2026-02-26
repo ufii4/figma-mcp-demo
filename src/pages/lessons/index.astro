@@ -1,0 +1,130 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LessonCard from '../../components/LessonCard.astro';
+import { getCollection } from 'astro:content';
+
+const lessons = (await getCollection('lessons')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Layout title="Lessons">
+  <section class="page-header">
+    <h1 class="text-h1">Lessons</h1>
+    <p class="text-secondary">Master UI design through hands-on, step-by-step walkthroughs</p>
+
+    <div class="filter-chips" data-filter-chips>
+      <button class="chip chip--active" data-filter="all">All</button>
+      <button class="chip" data-filter="beginner">Beginner</button>
+      <button class="chip" data-filter="intermediate">Intermediate</button>
+    </div>
+  </section>
+
+  <section class="lesson-grid" data-lesson-grid>
+    {lessons.map(lesson => (
+      <div class="lesson-grid__item" data-difficulty={lesson.data.difficulty}>
+        <LessonCard
+          title={lesson.data.title}
+          description={lesson.data.description}
+          slug={lesson.data.slug}
+          difficulty={lesson.data.difficulty}
+          duration={lesson.data.duration}
+          accentColor={lesson.data.accentColor}
+        />
+      </div>
+    ))}
+  </section>
+</Layout>
+
+<script>
+  function initFilters() {
+    const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = document.querySelectorAll<HTMLElement>('[data-difficulty]');
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const filter = chip.dataset.filter;
+
+        // Update active chip
+        chips.forEach(c => c.classList.remove('chip--active'));
+        chip.classList.add('chip--active');
+
+        // Filter cards
+        items.forEach(item => {
+          if (filter === 'all' || item.dataset.difficulty === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  initFilters();
+  document.addEventListener('astro:after-swap', initFilters);
+</script>
+
+<style>
+  .page-header {
+    padding: var(--space-7) var(--space-10) var(--space-6);
+  }
+
+  .page-header h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .chip {
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .chip--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-10) var(--space-9);
+    max-width: 1440px;
+  }
+
+  .lesson-grid__item {
+    transition: opacity var(--transition-base);
+  }
+
+  @media (max-width: 1024px) {
+    .lesson-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .page-header { padding: var(--space-6) var(--space-4) var(--space-4); }
+    .lesson-grid {
+      grid-template-columns: 1fr;
+      padding: var(--space-4) var(--space-4) var(--space-7);
+    }
+  }
+</style>

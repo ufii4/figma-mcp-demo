@@ -1,0 +1,46 @@
+{
+  "title": "Design Tokens & Variables",
+  "slug": "design-tokens",
+  "description": "Learn how to build a systematic color palette using CSS custom properties and Figma variables. Start with hardcoded values and progressively refactor into a flexible, themeable token system.",
+  "difficulty": "beginner",
+  "duration": "15 min",
+  "order": 1,
+  "accentColor": "var(--color-primary)",
+  "steps": [
+    {
+      "title": "Define your base colors",
+      "instruction": "Start by choosing a primary color that represents your brand. We'll use a vibrant blue as our foundation and build the rest of the palette from there. Hardcoded hex values are the simplest starting point.",
+      "code": "<span style=\"color:#c792ea\">.card</span> {\n  <span style=\"color:#82aaff\">background</span>: <span style=\"color:#f78c6c\">#3b82f6</span>;\n  <span style=\"color:#82aaff\">color</span>: <span style=\"color:#f78c6c\">#ffffff</span>;\n  <span style=\"color:#82aaff\">border</span>: <span style=\"color:#f78c6c\">1px</span> solid <span style=\"color:#f78c6c\">#e2e5eb</span>;\n}",
+      "codeFilename": "styles.css",
+      "preview": "<div style=\"display:flex;gap:12px;align-items:center;\"><div style=\"width:48px;height:48px;border-radius:10px;background:#3b82f6;\"></div><div style=\"width:48px;height:48px;border-radius:10px;background:#06b6d4;\"></div><div style=\"width:48px;height:48px;border-radius:10px;background:#f59e0b;\"></div></div><p style=\"font-size:13px;color:#5a6375;margin-top:8px;\">Hardcoded hex values</p>"
+    },
+    {
+      "title": "Convert to CSS custom properties",
+      "instruction": "Now refactor those hardcoded values into CSS custom properties. This makes them reusable across your entire stylesheet. Define them on :root so they're available everywhere.",
+      "code": "<span style=\"color:#c792ea\">:root</span> {\n  <span style=\"color:#82aaff\">--color-primary</span>: <span style=\"color:#f78c6c\">#3b82f6</span>;\n  <span style=\"color:#82aaff\">--color-secondary</span>: <span style=\"color:#f78c6c\">#06b6d4</span>;\n  <span style=\"color:#82aaff\">--color-accent</span>: <span style=\"color:#f78c6c\">#f59e0b</span>;\n}\n\n<span style=\"color:#c792ea\">.card</span> {\n  <span style=\"color:#82aaff\">background</span>: <span style=\"color:#82aaff\">var</span>(<span style=\"color:#f78c6c\">--color-primary</span>);\n}",
+      "codeFilename": "tokens.css",
+      "preview": "<div style=\"display:flex;gap:12px;align-items:center;\"><div style=\"width:48px;height:48px;border-radius:10px;background:var(--color-primary);\"></div><div style=\"width:48px;height:48px;border-radius:10px;background:var(--color-secondary);\"></div><div style=\"width:48px;height:48px;border-radius:10px;background:var(--color-accent);\"></div></div><p style=\"font-size:13px;color:var(--color-text-secondary);margin-top:8px;\">Using CSS variables \u2728</p>"
+    },
+    {
+      "title": "Add semantic token names",
+      "instruction": "Go beyond raw colors and create semantic tokens. Instead of --color-blue, use --color-surface, --color-text, --color-border. This decouples your design from specific color values.",
+      "code": "<span style=\"color:#c792ea\">:root</span> {\n  <span style=\"color:#546e7a\">/* Semantic tokens */</span>\n  <span style=\"color:#82aaff\">--color-surface</span>: <span style=\"color:#f78c6c\">#ffffff</span>;\n  <span style=\"color:#82aaff\">--color-text</span>: <span style=\"color:#f78c6c\">#121726</span>;\n  <span style=\"color:#82aaff\">--color-border</span>: <span style=\"color:#f78c6c\">#e2e5eb</span>;\n}",
+      "codeFilename": "tokens.css",
+      "preview": "<div style=\"background:#fff;border:1px solid #e2e5eb;border-radius:12px;padding:20px;width:180px;\"><div style=\"font-weight:600;color:#121726;font-size:14px;\">Card Title</div><div style=\"color:#5a6375;font-size:12px;margin-top:4px;\">Semantic tokens in action</div></div>"
+    },
+    {
+      "title": "Enable theme switching",
+      "instruction": "The magic moment! Use data attributes to create theme variants. When you change [data-theme], all your variables update simultaneously. Every component using tokens adapts instantly.",
+      "code": "<span style=\"color:#c792ea\">[data-theme=\"ocean\"]</span> {\n  <span style=\"color:#82aaff\">--color-primary</span>: <span style=\"color:#f78c6c\">#3b82f6</span>;\n}\n<span style=\"color:#c792ea\">[data-theme=\"forest\"]</span> {\n  <span style=\"color:#82aaff\">--color-primary</span>: <span style=\"color:#f78c6c\">#10b981</span>;\n}\n<span style=\"color:#c792ea\">[data-theme=\"sunset\"]</span> {\n  <span style=\"color:#82aaff\">--color-primary</span>: <span style=\"color:#f78c6c\">#f97316</span>;\n}",
+      "codeFilename": "themes.css",
+      "preview": "<div style=\"display:flex;gap:8px;\"><div style=\"width:32px;height:32px;border-radius:8px;background:#3b82f6;\" title=\"Ocean\"></div><div style=\"width:32px;height:32px;border-radius:8px;background:#10b981;\" title=\"Forest\"></div><div style=\"width:32px;height:32px;border-radius:8px;background:#f97316;\" title=\"Sunset\"></div><div style=\"width:32px;height:32px;border-radius:8px;background:#8b5cf6;\" title=\"Berry\"></div></div><p style=\"font-size:13px;color:var(--color-text-secondary);margin-top:8px;\">One click, everything changes!</p>"
+    },
+    {
+      "title": "Build gradient from tokens",
+      "instruction": "For the grand finale, derive a gradient from your token values. Now when the theme switches, even your gradients transform automatically. This is the power of a token-based system.",
+      "code": "<span style=\"color:#c792ea\">:root</span> {\n  <span style=\"color:#82aaff\">--gradient-hero</span>: <span style=\"color:#82aaff\">linear-gradient</span>(\n    <span style=\"color:#f78c6c\">135deg</span>,\n    <span style=\"color:#82aaff\">var</span>(<span style=\"color:#f78c6c\">--color-primary</span>),\n    <span style=\"color:#82aaff\">var</span>(<span style=\"color:#f78c6c\">--color-secondary</span>),\n    <span style=\"color:#82aaff\">var</span>(<span style=\"color:#f78c6c\">--color-accent</span>)\n  );\n}",
+      "codeFilename": "gradient.css",
+      "preview": "<div style=\"width:200px;height:100px;border-radius:12px;background:linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));\"></div><p style=\"font-size:13px;color:var(--color-text-secondary);margin-top:8px;\">Gradient adapts to any theme!</p>"
+    }
+  ]
+}

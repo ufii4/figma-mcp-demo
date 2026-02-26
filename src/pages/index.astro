@@ -1,128 +1,210 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ThemeSidebar from '../components/ThemeSidebar.astro';
+import GradientHero from '../components/GradientHero.astro';
 import Button from '../components/Button.astro';
-import Badge from '../components/Badge.astro';
-import Input from '../components/Input.astro';
-import Card from '../components/Card.astro';
-import Toggle from '../components/Toggle.astro';
+import LessonCard from '../components/LessonCard.astro';
+
+const lessons = [
+  {
+    title: 'Design Tokens & Variables',
+    description: 'Learn how to build a color system using CSS custom properties and Figma variables.',
+    slug: 'design-tokens',
+    difficulty: 'beginner' as const,
+    duration: '15 min',
+    accentColor: 'var(--color-primary)',
+  },
+  {
+    title: 'Auto Layout Fundamentals',
+    description: "Build responsive card layouts using Figma's powerful auto-layout feature.",
+    slug: 'auto-layout',
+    difficulty: 'beginner' as const,
+    duration: '20 min',
+    accentColor: 'var(--color-accent)',
+  },
+  {
+    title: 'Component Variants',
+    description: 'Create a complete button system with sizes, styles, and interactive states.',
+    slug: 'component-variants',
+    difficulty: 'intermediate' as const,
+    duration: '25 min',
+    accentColor: 'var(--color-secondary)',
+  },
+];
+
+const features = [
+  { icon: '\u{1F3A8}', title: 'Design Tokens', description: 'Learn to build systematic color palettes, spacing scales, and typography that stays consistent across your designs.' },
+  { icon: '\u{1F9E9}', title: 'Components', description: 'Master Figma components, variants, and auto-layout to build flexible, reusable UI elements.' },
+  { icon: '\u{1F308}', title: 'Color Systems', description: 'Build light and dark themes with semantic color tokens that make your interfaces adaptable and accessible.' },
+];
+
+const stats = [
+  { number: '5', label: 'Lessons' },
+  { number: 'Step-by-Step', label: 'Walkthroughs' },
+  { number: '100%', label: 'Free & Open Source' },
+  { number: '4', label: 'Theme Palettes' },
+];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<Layout title="Component Library">
-  <div class="catalog">
-    <ThemeSidebar />
+<Layout title="Learn UI Design with Figma" transparentNav>
+  <GradientHero
+    title="Learn to Design Beautiful UIs"
+    subtitle="Master Figma through hands-on, step-by-step lessons. From design tokens to full component systems."
+  >
+    <Button variant="primary" size="lg" href={`${base}/lessons`}>Start Learning</Button>
+    <Button variant="ghost" size="lg" href={`${base}/lessons`}>View Lessons</Button>
+  </GradientHero>
 
-    <main class="main">
-      <h1 class="main__title">Component Library</h1>
+  <!-- What You'll Learn -->
+  <section class="features">
+    <div class="features__header">
+      <h2 class="text-h2">What You'll Learn</h2>
+      <p class="text-secondary">Practical skills that translate directly to your design workflow</p>
+    </div>
+    <div class="features__grid">
+      {features.map(feature => (
+        <div class="feature-card">
+          <span class="feature-card__icon">{feature.icon}</span>
+          <h3 class="text-h3">{feature.title}</h3>
+          <p class="text-body-sm text-secondary">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
 
-      <!-- Buttons -->
-      <section class="section">
-        <h2 class="section__heading">Buttons</h2>
-        <div class="section__row">
-          <Button variant="primary" label="Primary" />
-          <Button variant="secondary" label="Secondary" />
-          <Button variant="outline" label="Outline" />
-          <Button variant="ghost" label="Ghost" />
-        </div>
-        <div class="section__row">
-          <Button variant="primary" size="sm" label="Small" />
-          <Button variant="primary" size="md" label="Medium" />
-          <Button variant="primary" size="lg" label="Large" />
-        </div>
-      </section>
+  <!-- Featured Lessons -->
+  <section class="lessons-preview">
+    <div class="lessons-preview__header">
+      <h2 class="text-h2">Featured Lessons</h2>
+      <p class="text-secondary">Start with the fundamentals and build your way up</p>
+    </div>
+    <div class="lessons-preview__grid">
+      {lessons.map(lesson => (
+        <LessonCard {...lesson} />
+      ))}
+    </div>
+  </section>
 
-      <!-- Badges -->
-      <section class="section">
-        <h2 class="section__heading">Badges</h2>
-        <div class="section__row">
-          <Badge type="info" />
-          <Badge type="success" />
-          <Badge type="warning" />
-          <Badge type="error" />
-        </div>
-      </section>
-
-      <!-- Inputs -->
-      <section class="section">
-        <h2 class="section__heading">Inputs</h2>
-        <div class="section__row">
-          <Input state="default" placeholder="Enter text..." />
-          <Input state="focused" placeholder="Typing here..." />
-          <Input state="error" placeholder="Invalid input" />
-        </div>
-      </section>
-
-      <!-- Cards -->
-      <section class="section">
-        <h2 class="section__heading">Cards</h2>
-        <div class="section__row">
-          <Card
-            variant="basic"
-            title="Card Title"
-            description="A basic card with title and description content."
-          />
-          <Card
-            variant="action"
-            title="Action Card"
-            description="Card with a call-to-action button."
-            actionLabel="Take Action"
-          />
-        </div>
-      </section>
-
-      <!-- Toggles -->
-      <section class="section">
-        <h2 class="section__heading">Toggle</h2>
-        <div class="section__row">
-          <Toggle id="toggle-off" label="Disabled" />
-          <Toggle id="toggle-on" checked label="Enabled" />
-        </div>
-      </section>
-    </main>
-  </div>
+  <!-- Stats Strip -->
+  <section class="stats">
+    {stats.map(stat => (
+      <div class="stat">
+        <span class="stat__number">{stat.number}</span>
+        <span class="stat__label">{stat.label}</span>
+      </div>
+    ))}
+  </section>
 </Layout>
 
 <style>
-  .catalog {
-    display: flex;
-    min-height: 100vh;
+  /* Features Section */
+  .features {
+    padding: var(--space-9) var(--space-10);
+    text-align: center;
   }
 
-  .main {
-    flex: 1;
-    padding: 32px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    overflow-y: auto;
-  }
-
-  .main__title {
-    font-family: var(--font-family);
-    font-size: var(--text-h1);
-    font-weight: var(--weight-bold);
-    color: var(--color-text);
-    transition: color var(--transition);
-  }
-
-  .section {
+  .features__header {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-  }
-
-  .section__heading {
-    font-family: var(--font-family);
-    font-size: var(--text-h3);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text);
-    transition: color var(--transition);
-  }
-
-  .section__row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
     align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-7);
+  }
+
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+
+  .feature-card {
+    background: var(--color-surface-card);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: left;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: transform var(--transition-base);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .feature-card__icon {
+    font-size: 2.25rem;
+  }
+
+  /* Lessons Preview */
+  .lessons-preview {
+    padding: var(--space-9) var(--space-10);
+    background: var(--color-surface-alt);
+    text-align: center;
+  }
+
+  .lessons-preview__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-7);
+  }
+
+  .lessons-preview__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+
+  /* Stats Strip */
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--color-primary);
+    padding: var(--space-6) var(--space-10);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .stat__number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .stat__label {
+    font-size: var(--text-body-sm);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  @media (max-width: 768px) {
+    .features,
+    .lessons-preview {
+      padding: var(--space-7) var(--space-4);
+    }
+
+    .features__grid,
+    .lessons-preview__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stats {
+      flex-wrap: wrap;
+      gap: var(--space-5);
+      padding: var(--space-6) var(--space-4);
+    }
   }
 </style>

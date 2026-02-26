@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const resources = [
+  {
+    category: 'Design Tools',
+    items: [
+      { title: 'Figma', description: 'The collaborative interface design tool used throughout our lessons.', url: 'https://figma.com' },
+      { title: 'Figma Community', description: 'Free design files, plugins, and widgets from the community.', url: 'https://figma.com/community' },
+      { title: 'Realtime Colors', description: 'Visualize color palettes on a real website in real time.', url: 'https://realtimecolors.com' },
+    ],
+  },
+  {
+    category: 'CSS Resources',
+    items: [
+      { title: 'MDN Web Docs', description: 'Comprehensive documentation for CSS custom properties and modern CSS.', url: 'https://developer.mozilla.org' },
+      { title: 'CSS-Tricks', description: 'Articles and guides on CSS techniques including theming and custom properties.', url: 'https://css-tricks.com' },
+      { title: 'Modern CSS Solutions', description: 'Modern approaches to common CSS challenges.', url: 'https://moderncss.dev' },
+    ],
+  },
+  {
+    category: 'Typography',
+    items: [
+      { title: 'Google Fonts', description: 'Free, open-source fonts including Inter and JetBrains Mono used on this site.', url: 'https://fonts.google.com' },
+      { title: 'Type Scale', description: 'Visual type scale calculator for building harmonious typography.', url: 'https://typescale.com' },
+      { title: 'Font Pair', description: 'Curated font pairings for your design projects.', url: 'https://fontpair.co' },
+    ],
+  },
+  {
+    category: 'Color Theory',
+    items: [
+      { title: 'Coolors', description: 'Color palette generator for creating harmonious color schemes.', url: 'https://coolors.co' },
+      { title: 'Contrast Checker', description: 'WCAG contrast ratio checker for accessibility compliance.', url: 'https://webaim.org/resources/contrastchecker' },
+      { title: 'Open Color', description: 'An open-source color scheme optimized for UI design.', url: 'https://yeun.github.io/open-color' },
+    ],
+  },
+];
+---
+
+<Layout title="Resources" description="Curated tools, references, and learning materials for UI design.">
+  <section class="resources-header">
+    <h1 class="text-h1">Resources</h1>
+    <p class="text-secondary">Curated tools and references to complement your learning journey.</p>
+  </section>
+
+  <section class="resources-grid container">
+    {resources.map(group => (
+      <div class="resource-group">
+        <h2 class="text-h3">{group.category}</h2>
+        <div class="resource-list">
+          {group.items.map(item => (
+            <a href={item.url} target="_blank" rel="noopener noreferrer" class="resource-card">
+              <h3 class="resource-card__title">{item.title}</h3>
+              <p class="resource-card__desc">{item.description}</p>
+              <span class="resource-card__link">Visit &rarr;</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</Layout>
+
+<style>
+  .resources-header {
+    padding: var(--space-7) var(--space-10) var(--space-5);
+    max-width: 1440px;
+  }
+
+  .resources-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+    padding-bottom: var(--space-9);
+  }
+
+  .resource-group h2 {
+    margin-bottom: var(--space-4);
+    color: var(--color-primary);
+  }
+
+  .resource-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .resource-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    background: var(--color-surface-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .resource-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .resource-card__title {
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .resource-card__desc {
+    font-size: var(--text-body-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .resource-card__link {
+    font-size: var(--text-body-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: auto;
+  }
+
+  @media (max-width: 768px) {
+    .resources-header { padding-inline: var(--space-4); }
+    .resource-list { grid-template-columns: 1fr; }
+  }
+</style>

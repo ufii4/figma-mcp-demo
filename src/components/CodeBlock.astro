@@ -1,0 +1,55 @@
+---
+interface Props {
+  code: string;
+  filename?: string;
+}
+
+const { code, filename } = Astro.props;
+---
+
+<div class="code-block">
+  {filename && (
+    <div class="code-block__header">
+      <span class="code-block__filename">{filename}</span>
+    </div>
+  )}
+  <div class="code-block__body">
+    <pre><code set:html={code} /></pre>
+  </div>
+</div>
+
+<style>
+  .code-block {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-family: var(--font-code);
+    font-size: var(--text-code);
+    background: var(--color-code-bg);
+  }
+
+  .code-block__header {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1rem;
+  }
+
+  .code-block__filename {
+    color: rgba(200, 209, 224, 0.6);
+    font-size: var(--text-caption);
+    font-weight: 500;
+  }
+
+  .code-block__body {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  pre {
+    margin: 0;
+  }
+
+  code {
+    color: var(--color-code-text);
+    line-height: 1.6;
+    white-space: pre;
+  }
+</style>

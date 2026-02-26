@@ -1,0 +1,178 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import Callout from '../../components/Callout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map(lesson => ({
+    params: { slug: lesson.data.slug },
+    props: { lesson },
+  }));
+}
+
+const { lesson } = Astro.props;
+const { title, description, difficulty, duration, order, steps } = lesson.data;
+
+const allLessons = (await getCollection('lessons')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const currentIndex = allLessons.findIndex(l => l.data.slug === lesson.data.slug);
+const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const tips: Record<string, string> = {
+  'design-tokens': 'Pro tip: Use CSS custom properties to make your color system theme-aware from day one.',
+  'auto-layout': 'Pro tip: Start with mobile-first layouts and progressively enhance for larger screens.',
+  'component-variants': 'Pro tip: Use CSS custom properties inside components so they can be themed from the outside.',
+  'color-systems': 'Pro tip: Always test your color combinations for WCAG contrast compliance.',
+  'typography-scale': 'Pro tip: Use clamp() for fluid typography that adapts beautifully between breakpoints.',
+};
+---
+
+<Layout title={title}>
+  <!-- Lesson Header -->
+  <section class="lesson-header">
+    <div class="lesson-meta">
+      <Badge level={difficulty} />
+      <span class="separator">&middot;</span>
+      <span class="meta-text">{duration}</span>
+      <span class="separator">&middot;</span>
+      <span class="meta-text">Lesson {order} of {allLessons.length}</span>
+    </div>
+    <h1 class="text-h1">{title}</h1>
+    <p class="text-secondary lesson-desc">{description}</p>
+  </section>
+
+  <!-- Walkthrough -->
+  <section class="walkthrough-section">
+    <StepWalkthrough steps={steps} />
+  </section>
+
+  <!-- Tip -->
+  <section class="tip-section">
+    <Callout type="tip">{tips[lesson.data.slug] || 'Keep practicing and experimenting!'}</Callout>
+  </section>
+
+  <!-- Lesson Navigation -->
+  <nav class="lesson-nav">
+    {prevLesson ? (
+      <a href={`${base}/lessons/${prevLesson.data.slug}`} class="lesson-nav__item lesson-nav__prev">
+        <span class="lesson-nav__label">&larr; Previous Lesson</span>
+        <span class="lesson-nav__title">{prevLesson.data.title}</span>
+      </a>
+    ) : <div />}
+
+    {nextLesson ? (
+      <a href={`${base}/lessons/${nextLesson.data.slug}`} class="lesson-nav__item lesson-nav__next">
+        <span class="lesson-nav__label">Next Lesson &rarr;</span>
+        <span class="lesson-nav__title">{nextLesson.data.title}</span>
+      </a>
+    ) : <div />}
+  </nav>
+</Layout>
+
+<style>
+  .lesson-header {
+    padding: var(--space-7) var(--space-10) var(--space-5);
+    max-width: 1440px;
+  }
+
+  .lesson-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .separator {
+    color: var(--color-text-muted);
+  }
+
+  .meta-text {
+    font-size: var(--text-caption);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .lesson-desc {
+    margin-top: var(--space-3);
+    max-width: 720px;
+    line-height: 1.7;
+  }
+
+  .walkthrough-section {
+    padding: var(--space-4) var(--space-10) var(--space-6);
+    max-width: 1440px;
+    background: var(--color-surface-alt);
+  }
+
+  .tip-section {
+    padding: var(--space-4) var(--space-10);
+    max-width: 1440px;
+  }
+
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-6) var(--space-10);
+    background: var(--color-surface-alt);
+    max-width: 1440px;
+  }
+
+  .lesson-nav__item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    transition: transform var(--transition-fast);
+  }
+
+  .lesson-nav__item:hover {
+    transform: translateX(4px);
+  }
+
+  .lesson-nav__prev:hover {
+    transform: translateX(-4px);
+  }
+
+  .lesson-nav__next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .lesson-nav__label {
+    font-size: var(--text-caption);
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .lesson-nav__title {
+    font-size: var(--text-h3);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 768px) {
+    .lesson-header,
+    .walkthrough-section,
+    .tip-section,
+    .lesson-nav {
+      padding-inline: var(--space-4);
+    }
+
+    .lesson-nav {
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    .lesson-nav__next {
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>
